@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'dart:io';
+import 'dart:convert';
+import 'package:xml/xml.dart' as xml;
 
 void main() => runApp(new MyApp());
 
@@ -33,17 +36,32 @@ class ResultsPage extends StatefulWidget {
 }
 
 class ResultsState extends State<ResultsPage> {
-  var results = [
-    new Result("Donald Trumpasdf", "http://www.cnn.com/donald-trump", "Feb 1st, 2018"),
-    new Result("Donald Trumpasdf", "http://www.cnn.com/donald-trump", "Feb 1st, 2018"),
-    new Result("Donald Trump", "http://www.cnn.com/donald-trump", "Feb 1st, 2018"),
-    new Result("Donald Trumpasdf", "http://www.cnn.com/donald-trump", "Feb 1st, 2018"),
-    new Result("Donald Trump", "http://www.cnn.com/donald-trump", "Feb 1st, 2018"),
-    new Result("Donald Trump", "http://www.cnn.com/donald-trump", "Feb 1st, 2018"),
-    new Result("Donald Trump", "http://www.cnn.com/donald-trump", "Feb 1st, 2018"),
-    new Result("Donald Trump", "http://www.cnn.com/donald-trump", "Feb 1st, 2018"),
-    new Result("Donald Trump", "http://www.cnn.com/donald-trump", "Feb 1st, 2018"),
-  ];
+  List<Result> _results = new List<Result>();
+
+  _getData(String searchQuery) async {
+    List<Result> resultList = new List<Result>();
+    
+    var httpClient = new HttpClient();
+    var uri = new Uri.http('pa04benbasinski.cloudapp.net', '/Crawler.asmx/Search', {'query': searchQuery});
+    var request = await httpClient.getUrl(uri);
+    var response = await request.close();
+
+    if (response.statusCode == HttpStatus.OK) {
+      var xmlText = await response.transform(UTF8.decoder).join();
+      var xmlDocument = xml.parse(xmlText);
+      var jsonText = xmlDocument.rootElement.children.toString();
+      var data = JSON.decode(jsonText);
+      
+      for (var r in data[0]) {
+        Result result = new Result(r['Title'], r['URL'], r['DateString']);
+        resultList.add(result);
+      }
+    }
+
+    setState(() {
+      _results = resultList;
+    });
+  }
 
   Widget build(BuildContext context) {
     var searchBox = new TextField(
@@ -52,16 +70,16 @@ class ResultsState extends State<ResultsPage> {
         filled: true,
       ),
       onSubmitted: (searchQuery) {
-        //TODO: add results from search
-        print(searchQuery);
+        _getData(searchQuery);
       },
     );
 
     var resultListBuilder =  new ListView.builder(
         itemBuilder: (context, index) {
-          return new ResultItem(results[index].title, results[index].url, results[index].date);
+          Result tile = _results[index];
+          return new ResultItem(tile.title, tile.url, tile.date);
         },
-        itemCount: results.length,
+        itemCount: _results.length,
     );
 
     return new Column(
