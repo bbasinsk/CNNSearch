@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'dart:io';
 import 'dart:convert';
+import 'dart:async';
 import 'package:xml/xml.dart' as xml;
+import 'package:url_launcher/url_launcher.dart';
 
 void main() => runApp(new MyApp());
 
@@ -38,7 +40,7 @@ class ResultsPage extends StatefulWidget {
 class ResultsState extends State<ResultsPage> {
   List<Result> _results = new List<Result>();
 
-  _getData(String searchQuery) async {
+  Future<List<Result>> _getData(String searchQuery) async {
     List<Result> resultList = new List<Result>();
     
     var httpClient = new HttpClient();
@@ -51,16 +53,13 @@ class ResultsState extends State<ResultsPage> {
       var xmlDocument = xml.parse(xmlText);
       var jsonText = xmlDocument.rootElement.children.toString();
       var data = JSON.decode(jsonText);
-      
+
       for (var r in data[0]) {
         Result result = new Result(r['Title'], r['URL'], r['DateString']);
         resultList.add(result);
       }
     }
-
-    setState(() {
-      _results = resultList;
-    });
+    return resultList;
   }
 
   Widget build(BuildContext context) {
@@ -70,7 +69,11 @@ class ResultsState extends State<ResultsPage> {
         filled: true,
       ),
       onSubmitted: (searchQuery) {
-        _getData(searchQuery);
+        _getData(searchQuery).then((resList) {
+          setState(() {
+            _results = resList;
+          });
+        });
       },
     );
 
@@ -104,14 +107,47 @@ class ResultItem extends StatelessWidget {
   final String url;
   final String date;
 
+  _launchURL() async {
+//    const url = "http://www.google.com/";
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
+    return;
+  }
+
   Widget _buildTile(String title, String url, String date) {
-    return new Container(
-      padding: const EdgeInsets.all(5.0),
-      child: new ListTile(
-        title: new Text(title),
-        subtitle: new Text(url),
-        trailing: new Text(date),
-      ),
+    return
+      new RaisedButton(
+        onPressed: _launchURL,
+        color: Colors.white,
+        child: new Container(
+          padding: const EdgeInsets.all(20.0),
+          child: new Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              new Container(
+                  padding: new EdgeInsets.only(bottom: 10.0),
+                  child: new Text(title,
+                      style: new TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold)
+                  )
+              ),
+              new Container(
+                padding: new EdgeInsets.only(bottom: 10.0),
+                child: new Text(url,
+                    style: new TextStyle(color: Colors.blue)
+                ),
+              ),
+              new Container(
+                child: new Text(date,
+                    style: new TextStyle(fontSize: 12.0, color: Colors.grey[500])
+                ),
+              ),
+            ],
+          ),
+
+      )
     );
   }
   
