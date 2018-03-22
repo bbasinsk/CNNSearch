@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
 
 class SearchBox extends StatelessWidget {
+
+  final ValueSetter<String> onSubmit;
+
+  SearchBox(this.onSubmit);
+
   @override
   Widget build(BuildContext context) {
 
@@ -11,11 +16,7 @@ class SearchBox extends StatelessWidget {
         filled: true,
       ),
       onSubmitted: (searchQuery) {
-        _getData(searchQuery).then((resList) {
-          setState(() {
-            _results = resList;
-          });
-        });
+        onSubmit(searchQuery);
       },
     );
 

@@ -1,11 +1,11 @@
 import 'package:cnn_search/Results/Result.dart';
 import 'package:cnn_search/Results/ResultItem.dart';
+import 'package:cnn_search/SearchBar/SearchBox.dart';
 import 'package:flutter/material.dart';
 import 'dart:io';
 import 'dart:convert';
 import 'dart:async';
 import 'package:xml/xml.dart' as xml;
-
 
 void main() => runApp(new MyApp());
 
@@ -57,6 +57,14 @@ class CnnSearchPageState extends State<CnnSearchPage> {
     return resultList;
   }
 
+  void onSubmit(searchQuery) {
+    _getData(searchQuery).then((resList) {
+      setState(() {
+        _results = resList;
+      });
+    });
+  }
+
   Widget build(BuildContext context) {
     var resultListBuilder =  new ListView.builder(
         itemBuilder: (context, index) {
@@ -68,11 +76,7 @@ class CnnSearchPageState extends State<CnnSearchPage> {
 
     return new Column(
       children: <Widget>[
-//        new Container(
-//          padding: new EdgeInsets.all(15.0),
-//          color: Colors.grey[200],
-//          child: searchBox,
-//        ),
+        new SearchBox(onSubmit),
         new Expanded(
             child: resultListBuilder
         ),
