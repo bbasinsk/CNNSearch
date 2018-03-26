@@ -5,13 +5,15 @@ void main() => runApp(new MyApp());
 
 class MyApp extends StatelessWidget {
 
+  final String appName = 'Ben\'s Search';
+
   @override
   Widget build(BuildContext context) {
     return new MaterialApp(
-      title: 'CNN Search',
+      title: appName,
       home: new Scaffold(
         appBar: new AppBar(
-          title: new Text('CNN Search'),
+          title: new Text(appName),
         ),
         body: new Container(
           child: new CnnSearchPage(),

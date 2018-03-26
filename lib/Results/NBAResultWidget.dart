@@ -16,7 +16,6 @@ class NBAResultWidget extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           new Image.network("https://nba-players.herokuapp.com/players/James/LeBron", width: 100.0),
-//          new Placeholder(fallbackHeight: 100.0, fallbackWidth: 100.0),
           new Padding(padding: new EdgeInsets.only(left: 20.0)),
           new Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -56,6 +55,5 @@ class NBAResultWidget extends StatelessWidget {
         ],
       ),
     );
-
   }
 }
