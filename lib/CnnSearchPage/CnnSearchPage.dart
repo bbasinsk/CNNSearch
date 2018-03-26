@@ -4,9 +4,11 @@ import 'dart:convert';
 import 'dart:async';
 import 'package:xml/xml.dart' as xml;
 
-import 'package:cnn_search/Results/Result.dart';
-import 'package:cnn_search/Results/ResultList.dart';
+import 'package:cnn_search/Results/CnnResult.dart';
+import 'package:cnn_search/Results/CnnResultsList.dart';
 import 'package:cnn_search/SearchBar/SearchBox.dart';
+import 'package:cnn_search/Results/NBAResultWidget.dart';
+import 'package:cnn_search/Results/NBAResult.dart';
 
 class CnnSearchPage extends StatefulWidget {
   @override
@@ -14,10 +16,11 @@ class CnnSearchPage extends StatefulWidget {
 }
 
 class CnnSearchPageState extends State<CnnSearchPage> {
-  List<Result> _results = new List<Result>();
+  List<CnnResult> _results = new List<CnnResult>();
+  NBAResult _nbaResult = new NBAResult("Lebron James", "CLE", "6.6", "70", "25.0", "7.4", "1.1");
 
-  Future<List<Result>> _getData(String searchQuery) async {
-    List<Result> resultList = new List<Result>();
+  Future<List<CnnResult>> _getData(String searchQuery) async {
+    List<CnnResult> resultList = new List<CnnResult>();
 
     var httpClient = new HttpClient();
     var uri = new Uri.http('pa04benbasinski.cloudapp.net', '/Crawler.asmx/Search', {'query': searchQuery});
@@ -31,7 +34,7 @@ class CnnSearchPageState extends State<CnnSearchPage> {
       var data = JSON.decode(jsonText);
 
       for (var r in data[0]) {
-        Result result = new Result(r['Title'], r['URL'], r['DateString']);
+        CnnResult result = new CnnResult(r['Title'], r['URL'], r['DateString']);
         resultList.add(result);
       }
     }
@@ -50,7 +53,8 @@ class CnnSearchPageState extends State<CnnSearchPage> {
     return new Column(
         children: <Widget>[
           new SearchBox(onSubmit),
-          new ResultList(_results),
+          new NBAResultWidget(_nbaResult),
+          new CnnResultsList(_results),
         ]
     );
   }

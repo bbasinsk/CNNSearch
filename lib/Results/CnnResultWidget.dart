@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class ResultItem extends StatelessWidget {
-  const ResultItem(this.title, this.url, this.date);
+class CnnResultWidget extends StatelessWidget {
+  const CnnResultWidget(this.title, this.url, this.date);
 
   final String title;
   final String url;

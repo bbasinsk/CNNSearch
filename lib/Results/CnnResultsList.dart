@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:cnn_search/Results/CnnResult.dart';
 import 'package:cnn_search/Results/CnnResultWidget.dart';
 
-class ResultList extends StatelessWidget {
+class CnnResultsList extends StatelessWidget {
 
   final _results;
-  ResultList(this._results);
+  CnnResultsList(this._results);
 
   @override
   Widget build(BuildContext context) {
