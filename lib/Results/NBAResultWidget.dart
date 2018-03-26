@@ -11,11 +11,12 @@ class NBAResultWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var playerInfo = new Padding(
-      padding: new EdgeInsets.only(bottom: 20.0),
+      padding: new EdgeInsets.only(bottom: 10.0),
       child: new Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          new Placeholder(fallbackHeight: 100.0, fallbackWidth: 100.0),
+          new Image.network("https://nba-players.herokuapp.com/players/James/LeBron", width: 100.0),
+//          new Placeholder(fallbackHeight: 100.0, fallbackWidth: 100.0),
           new Padding(padding: new EdgeInsets.only(left: 20.0)),
           new Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -36,7 +37,7 @@ class NBAResultWidget extends StatelessWidget {
     );
 
     var stats =  new Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: <Widget>[
         new StatWidget("AST", _nbaResult.ast),
         new StatWidget("GP", _nbaResult.gp),
@@ -47,7 +48,7 @@ class NBAResultWidget extends StatelessWidget {
     );
 
     return new Padding(
-      padding: new EdgeInsets.fromLTRB(75.0, 20.0, 75.0, 20.0),
+      padding: new EdgeInsets.fromLTRB(75.0, 10.0, 75.0, 10.0),
       child: new Column(
         children: <Widget>[
           playerInfo,
