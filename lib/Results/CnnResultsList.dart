@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import 'package:cnn_search/Results/Result.dart';
-import 'package:cnn_search/Results/ResultItem.dart';
+import 'package:cnn_search/Results/CnnResult.dart';
+import 'package:cnn_search/Results/CnnResultWidget.dart';
 
 class ResultList extends StatelessWidget {
 
@@ -12,8 +12,8 @@ class ResultList extends StatelessWidget {
   Widget build(BuildContext context) {
     var resultListBuilder =  new ListView.builder(
       itemBuilder: (context, index) {
-        Result tile = _results[index];
-        return new ResultItem(tile.title, tile.url, tile.date);
+        CnnResult tile = _results[index];
+        return new CnnResultWidget(tile.title, tile.url, tile.date);
       },
       itemCount: _results.length,
     );

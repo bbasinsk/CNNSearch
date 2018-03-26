@@ -9,7 +9,6 @@ class ResultItem extends StatelessWidget {
   final String date;
 
   _launchURL() async {
-//    const url = "http://www.google.com/";
     if (await canLaunch(url)) {
       await launch(url);
     } else {
